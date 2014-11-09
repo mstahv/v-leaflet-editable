@@ -88,6 +88,9 @@ public class LEditable extends AbstractExtension {
 		}
 	}
 
+    /**
+     * Only available for polygons.
+     */
     public void newHole() {
         getRpcProxy(EditableClientRcp.class).newHole();
     }
