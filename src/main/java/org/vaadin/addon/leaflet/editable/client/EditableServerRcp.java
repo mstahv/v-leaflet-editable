@@ -9,11 +9,9 @@ import com.vaadin.shared.communication.ServerRpc;
 public interface EditableServerRcp extends ServerRpc {
 
 	@Delayed(lastOnly=true)
-	public void circleModified(Connector cc, Point latLng,
-			double radius);
+	public void circleModified(Connector cc, Point latLng, double radius);
 
 	@Delayed(lastOnly=true)
-	public void polylineModified(Connector plc,
-			Point[] pointArray);
+	public void vectorModified(Connector plc, String geojson);
 
 }

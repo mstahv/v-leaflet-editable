@@ -1,14 +1,21 @@
 package org.vaadin.addon.leaflet.editable;
 
+import com.vaadin.server.AbstractExtension;
+import com.vaadin.shared.Connector;
+import com.vividsolutions.jts.geom.LineString;
+import com.vividsolutions.jts.geom.Polygon;
 import org.vaadin.addon.leaflet.AbstractLeafletVector;
 import org.vaadin.addon.leaflet.LCircle;
-import org.vaadin.addon.leaflet.LPolyline;
+import org.vaadin.addon.leaflet.LeafletLayer;
+import org.vaadin.addon.leaflet.editable.client.EditableClientRcp;
 import org.vaadin.addon.leaflet.editable.client.EditableServerRcp;
 import org.vaadin.addon.leaflet.shared.Point;
 
-import com.vaadin.server.AbstractExtension;
-import com.vaadin.shared.Connector;
-import org.vaadin.addon.leaflet.editable.client.EditableClientRcp;
+import java.io.IOException;
+import org.geotools.geojson.feature.FeatureJSON;
+import org.opengis.feature.simple.SimpleFeature;
+import org.vaadin.addon.leaflet.LPolygon;
+import org.vaadin.addon.leaflet.LPolyline;
 
 /**
  * Editing extension for Leaflet vectors.
@@ -47,10 +54,27 @@ public class LEditable extends AbstractExtension {
 			}
 
 			@Override
-			public void polylineModified(Connector plc, Point[] pointArray) {
-				LPolyline pl = (LPolyline) plc;
-				pl.setPoints(pointArray);
-				fireEvent(new FeatureModifiedEvent(LEditable.this, pl));
+			public void vectorModified(Connector plc, String geojson) {
+				//LPolyline pl = (LPolyline) plc;
+				//pl.setPoints(pointArray);
+				try {
+                    FeatureJSON featureJSON = new FeatureJSON();
+                    SimpleFeature readFeature = featureJSON.readFeature(geojson);
+                    
+                    Object defaultGeometry = readFeature.getDefaultGeometry();
+                    
+                    if (plc instanceof LPolygon) {
+                        LPolygon poly = (LPolygon) plc;
+                        poly.setGeometry((Polygon) defaultGeometry);
+                    } else if (plc instanceof LPolyline) {
+                        LPolyline poly = (LPolyline) plc;
+                        poly.setGeometry((LineString) defaultGeometry);
+                    }
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+
+				fireEvent(new FeatureModifiedEvent(LEditable.this, (LeafletLayer) plc));
 				remove();
 			}
 

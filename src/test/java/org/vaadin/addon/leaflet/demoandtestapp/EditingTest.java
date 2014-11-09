@@ -1,25 +1,23 @@
 package org.vaadin.addon.leaflet.demoandtestapp;
 
-import org.vaadin.addon.leaflet.AbstractLeafletVector;
-import org.vaadin.addon.leaflet.LCircle;
-import org.vaadin.addon.leaflet.LMap;
-import org.vaadin.addon.leaflet.LPolygon;
-import org.vaadin.addon.leaflet.LPolyline;
-import org.vaadin.addon.leaflet.LTileLayer;
-import org.vaadin.addon.leaflet.editable.FeatureModifiedEvent;
-import org.vaadin.addon.leaflet.editable.FeatureModifiedListener;
-import org.vaadin.addon.leaflet.editable.LEditable;
-import org.vaadin.addon.leaflet.shared.Point;
-
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Notification;
+import org.vaadin.addon.leaflet.*;
+import org.vaadin.addon.leaflet.editable.FeatureModifiedEvent;
+import org.vaadin.addon.leaflet.editable.FeatureModifiedListener;
+import org.vaadin.addon.leaflet.editable.LEditable;
+import org.vaadin.addon.leaflet.shared.Point;
 import org.vaadin.addonhelpers.AbstractTest;
+import org.vaadin.maddon.layouts.MHorizontalLayout;
 
 public class EditingTest extends AbstractTest implements
         FeatureModifiedListener {
+
+    private LPolygon polygon;
 
     @Override
     public String getDescription() {
@@ -42,7 +40,7 @@ public class EditingTest extends AbstractTest implements
         LCircle circle = new LCircle(new Point(-50, 0), 3000 * 1000);
         LPolyline polyline = new LPolyline(new Point(40, 0), new Point(70, 0));
 
-        LPolygon polygon = new LPolygon(new Point(0, 0), new Point(30, 30),
+        polygon = new LPolygon(new Point(0, 0), new Point(30, 30),
                 new Point(30, 0));
         lEditing = new LEditable(polygon);
         lEditing.addFeatureModifiedListener(this);
@@ -55,6 +53,8 @@ public class EditingTest extends AbstractTest implements
     @Override
     protected void setup() {
         super.setup();
+
+        HorizontalLayout tools = new MHorizontalLayout();
 
         for (final Component c : leafletMap) {
             if (c instanceof AbstractLeafletVector) {
@@ -70,11 +70,11 @@ public class EditingTest extends AbstractTest implements
                         lEditing = new LEditable((AbstractLeafletVector) c);
                     }
                 });
-                content.addComponent(button);
+                tools.addComponent(button);
             }
         }
 
-        content.addComponent(new Button("Stop editing",
+        tools.addComponent(new Button("Stop editing",
                 new Button.ClickListener() {
                     @Override
                     public void buttonClick(ClickEvent event) {
@@ -84,15 +84,20 @@ public class EditingTest extends AbstractTest implements
                     }
                 }));
 
-        content.addComponent(new Button("Add hole",
+        tools.addComponent(new Button("Add hole",
                 new Button.ClickListener() {
                     @Override
                     public void buttonClick(ClickEvent event) {
-                        if (lEditing.getParent() != null) {
-                            lEditing.newHole();
-                        }
+                        lEditing = new LEditable(polygon);
+                        lEditing.newHole();
+                        leafletMap.zoomToContent(polygon);
                     }
                 }));
+
+        content.addComponent(tools);
+
+        leafletMap.setSizeFull();
+        content.setExpandRatio(leafletMap, 1);
 
     }
 
