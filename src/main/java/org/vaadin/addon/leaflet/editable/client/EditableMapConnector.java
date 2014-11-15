@@ -2,8 +2,8 @@ package org.vaadin.addon.leaflet.editable.client;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
-import com.google.gwt.user.client.Window;
 import com.vaadin.client.ServerConnector;
+import com.vaadin.client.VConsole;
 import com.vaadin.client.communication.RpcProxy;
 import com.vaadin.client.communication.StateChangeEvent;
 import com.vaadin.client.extensions.AbstractExtensionConnector;
@@ -18,63 +18,71 @@ import org.vaadin.addon.leaflet.editable.LEditableMap;
 
 @Connect(LEditableMap.class)
 public class EditableMapConnector extends AbstractExtensionConnector {
-    
-	static {
-		LeafletEditableResourceInjector.ensureInjected();
-	}
 
-	private final EditableMapServerRcp rpc = RpcProxy.create(EditableMapServerRcp.class, this);
+    static {
+        LeafletEditableResourceInjector.ensureInjected();
+    }
 
-	private EditableMap map;
+    private final EditableMapServerRcp rpc = RpcProxy.create(
+            EditableMapServerRcp.class, this);
 
-	@Override
-	protected void extend(final ServerConnector target) {
+    private EditableMap map;
+
+    @Override
+    protected void extend(final ServerConnector target) {
         registerRpc(EditableMapClientRcp.class, new EditableMapClientRcp() {
 
-			@Override
-			public void startPolygon() {
+            @Override
+            public void startPolygon() {
                 getMap().startPolygon();
-			}
+            }
 
             @Override
             public void startPolyline() {
                 getMap().startPolyline();
             }
-		});
-	}
+        });
+    }
 
-	@Override
-	public void onStateChanged(StateChangeEvent stateChangeEvent) {
-		Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+    @Override
+    public void onStateChanged(StateChangeEvent stateChangeEvent) {
+        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
 
-			@Override
-			public void execute() {
+            @Override
+            public void execute() {
+                getMap().removeCreatedListeners();
+                
+                if (hasEventListener("featureDrawn")) {
+                    VConsole.error("Feature drawn listener adding");
+                    getMap().addCreatedListener(new FeatureCreatedListener() {
 
-                getMap().addCreatedListener(new FeatureCreatedListener() {
-
-                    @Override
-                    public void onCreated(LayerCreatedEvent event) {
-                        // send to server
-                        rpc.vectorCreated(event.getLayer().toGeoJSONString());
+                        @Override
+                        public void onCreated(LayerCreatedEvent event) {
+                            // send to server
+                            rpc.
+                                    vectorCreated(event.getLayer().
+                                            toGeoJSONString());
                         // remove created layer lazily (server side should add it back if needed
-                        // TODO lazily
-                        LayerGroup lg = getMap().getNewFeatureLayer();
-                        lg.removeLayer(event.getLayer());
-                    }
-                });
-			}
-		});
-	}
+                            // TODO lazily
+                            LayerGroup lg = getMap().getNewFeatureLayer();
+                            lg.removeLayer(event.getLayer());
+                        }
+                    });
+                }
 
-	public EditableMap getMap() {
-		LeafletMapConnector parent = (LeafletMapConnector) getParent();
-		map = (EditableMap) parent.getMap().cast();
-		return map;
-	}
-	
-	@Override
-	public void onUnregister() {
-		super.onUnregister();
-	}
+            }
+        });
+    }
+
+    public EditableMap getMap() {
+        LeafletMapConnector parent = (LeafletMapConnector) getParent();
+        map = (EditableMap) parent.getMap().cast();
+        return map;
+    }
+
+    @Override
+    public void onUnregister() {
+        super.onUnregister();
+    }
 
 }

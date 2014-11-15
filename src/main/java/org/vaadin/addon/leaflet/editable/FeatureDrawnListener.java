@@ -20,7 +20,7 @@ import java.lang.reflect.Method;
 
 /**
  *
- * @author Matti Tahvonen <matti@vaadin.com>
+ * @author Matti Tahvonen
  */
 public interface FeatureDrawnListener {
     public static final Method drawnMethod = ReflectTools.findMethod(FeatureDrawnListener.class,

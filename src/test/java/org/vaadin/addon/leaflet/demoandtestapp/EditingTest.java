@@ -11,6 +11,7 @@ import org.vaadin.addon.leaflet.editable.FeatureModifiedEvent;
 import org.vaadin.addon.leaflet.editable.FeatureModifiedListener;
 import org.vaadin.addon.leaflet.editable.LEditable;
 import org.vaadin.addon.leaflet.shared.Point;
+import org.vaadin.addon.leaflet.util.JTSUtil;
 import org.vaadin.addonhelpers.AbstractTest;
 import org.vaadin.maddon.layouts.MHorizontalLayout;
 
@@ -68,6 +69,14 @@ public class EditingTest extends AbstractTest implements
                             lEditing.remove();
                         }
                         lEditing = new LEditable((AbstractLeafletVector) c);
+                        lEditing.addFeatureModifiedListener(new FeatureModifiedListener() {
+
+                            @Override
+                            public void featureModified(
+                                    FeatureModifiedEvent event) {
+                                Notification.show("Modified :" + ((AbstractLeafletVector) c).getGeometry().toText());
+                            }
+                        });
                     }
                 });
                 tools.addComponent(button);

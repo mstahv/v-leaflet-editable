@@ -27,12 +27,14 @@ import org.vaadin.addon.leaflet.editable.client.EditableMapServerRcp;
 public class LEditableMap extends AbstractExtension {
 
 	public void addFeatureDrawnListener(FeatureDrawnListener listener) {
-		addListener(FeatureDrawnEvent.class, listener,
+		addListener("featureDrawn", FeatureDrawnEvent.class, listener,
 				FeatureDrawnListener.drawnMethod);
+        markAsDirty();
 	}
 
 	public void removeFeatureDrawnListener(FeatureDrawnListener listener) {
-		removeListener(FeatureDrawnEvent.class, listener);
+		removeListener("featureDrawn",FeatureDrawnEvent.class, listener);
+        markAsDirty();
 	}
 
 	public LEditableMap(LMap map) {

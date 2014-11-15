@@ -60,7 +60,6 @@ public class EditableConnector extends AbstractExtensionConnector {
 
 					@Override
 					public void onEdit() {
-						VConsole.error("Gotsa!");
 						if(isEnabled() && ef.isEnabled()) {
 							if (c instanceof LeafletCircleConnector) {
 								Circle circle = (Circle) c.getLayer();
