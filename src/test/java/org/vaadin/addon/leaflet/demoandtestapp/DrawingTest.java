@@ -12,7 +12,7 @@ import org.vaadin.addon.leaflet.editable.FeatureModifiedEvent;
 import org.vaadin.addon.leaflet.editable.FeatureModifiedListener;
 import org.vaadin.addon.leaflet.editable.LEditableMap;
 import org.vaadin.addonhelpers.AbstractTest;
-import org.vaadin.maddon.layouts.MHorizontalLayout;
+import org.vaadin.viritin.layouts.MHorizontalLayout;
 
 public class DrawingTest extends AbstractTest implements
         FeatureDrawnListener {

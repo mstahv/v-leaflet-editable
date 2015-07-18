@@ -11,9 +11,8 @@ import org.vaadin.addon.leaflet.editable.FeatureModifiedEvent;
 import org.vaadin.addon.leaflet.editable.FeatureModifiedListener;
 import org.vaadin.addon.leaflet.editable.LEditable;
 import org.vaadin.addon.leaflet.shared.Point;
-import org.vaadin.addon.leaflet.util.JTSUtil;
 import org.vaadin.addonhelpers.AbstractTest;
-import org.vaadin.maddon.layouts.MHorizontalLayout;
+import org.vaadin.viritin.layouts.MHorizontalLayout;
 
 public class EditingTest extends AbstractTest implements
         FeatureModifiedListener {
@@ -38,6 +37,7 @@ public class EditingTest extends AbstractTest implements
         leafletMap.addLayer(new LTileLayer(
                 "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"));
 
+        // Note 2015-7-18, Leaflet 1.0 update: don't remember if this has ever worked
         LCircle circle = new LCircle(new Point(-50, 0), 3000 * 1000);
         LPolyline polyline = new LPolyline(new Point(40, 0), new Point(70, 0));
 

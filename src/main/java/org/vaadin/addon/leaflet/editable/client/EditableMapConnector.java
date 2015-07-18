@@ -3,7 +3,6 @@ package org.vaadin.addon.leaflet.editable.client;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.vaadin.client.ServerConnector;
-import com.vaadin.client.VConsole;
 import com.vaadin.client.communication.RpcProxy;
 import com.vaadin.client.communication.StateChangeEvent;
 import com.vaadin.client.extensions.AbstractExtensionConnector;
@@ -53,7 +52,6 @@ public class EditableMapConnector extends AbstractExtensionConnector {
                 getMap().removeCreatedListeners();
                 
                 if (hasEventListener("featureDrawn")) {
-                    VConsole.error("Feature drawn listener adding");
                     getMap().addCreatedListener(new FeatureCreatedListener() {
 
                         @Override

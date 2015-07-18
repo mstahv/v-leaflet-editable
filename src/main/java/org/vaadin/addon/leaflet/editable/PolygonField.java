@@ -34,7 +34,7 @@ public class PolygonField extends AbstractJTSField<Polygon> implements
         super.initContent();
         AbsoluteLayout absoluteLayout = new AbsoluteLayout();
         absoluteLayout.addComponent(getMap());
-        absoluteLayout.addComponent(getToolbar(), "top:5px; right:5px;");
+        absoluteLayout.addComponent(getToolbar(), "top:5px; right:5px;z-index:1000");
         return absoluteLayout;
     }
 
@@ -72,7 +72,7 @@ public class PolygonField extends AbstractJTSField<Polygon> implements
                 .toPresentation(internalValue);
         lPolyline.setGeometry(toPresentation);
         lEditable = new LEditable(lPolyline);
-        addHole.setEnabled(true);
+        getAddHoleButton().setEnabled(true);
         lEditable.addFeatureModifiedListener(new FeatureModifiedListener() {
 
             @Override
