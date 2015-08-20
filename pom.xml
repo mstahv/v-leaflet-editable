@@ -2,13 +2,12 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.vaadin.addon</groupId>
     <artifactId>v-leaflet-editable</artifactId>
-    <version>0.6.2-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <name>V-Leaflet-Editable</name>
     
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <vaadin.version>7.5.1</vaadin.version>
-        <g-leaflet-editable.version>0.4.8-SNAPSHOT</g-leaflet-editable.version>
+        <vaadin.version>7.5.4</vaadin.version>
         <geotools.version>10.2</geotools.version>
     </properties>
 
@@ -166,6 +165,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-release-plugin</artifactId>
+                    <version>2.5.2</version>
                     <configuration>
                         <pushChanges>false</pushChanges>
                         <localCheckout>true</localCheckout>
@@ -304,12 +304,12 @@
         <dependency>
             <groupId>org.vaadin.addon</groupId>
             <artifactId>v-leaflet</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <version>1.0.0-b1</version>
         </dependency>
         <dependency>
             <groupId>org.peimari</groupId>
             <artifactId>g-leaflet-editable</artifactId>
-            <version>0.6.2-SNAPSHOT</version>
+            <version>1.0.0-b1</version>
             <!-- Only needed during widgetset compilation, so provided scope would 
             be great for this, but with it is left out from widgetset compilation by 
             vaadin plugin -->
