@@ -3,7 +3,6 @@ package org.vaadin.addon.leaflet.editable.client;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.vaadin.client.ServerConnector;
-import com.vaadin.client.VConsole;
 import com.vaadin.client.communication.RpcProxy;
 import com.vaadin.client.communication.StateChangeEvent;
 import com.vaadin.client.extensions.AbstractExtensionConnector;
@@ -26,7 +25,7 @@ public class EditableConnector extends AbstractExtensionConnector {
 		LeafletEditableResourceInjector.ensureInjected();
 	}
 
-	private EditableServerRcp rpc = RpcProxy.create(EditableServerRcp.class, this);
+	private final EditableServerRcp rpc = RpcProxy.create(EditableServerRcp.class, this);
 
 	private EditableFeature ef;
 
@@ -88,6 +87,7 @@ public class EditableConnector extends AbstractExtensionConnector {
 	public void onUnregister() {
 		super.onUnregister();
 		ef.disableEdit();
+        ef.removeEditListener();
 	}
 
 }
