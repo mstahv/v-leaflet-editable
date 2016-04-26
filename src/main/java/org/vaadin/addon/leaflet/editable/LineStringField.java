@@ -62,6 +62,11 @@ public class LineStringField extends AbstractJTSField<LineString> {
         getEditableMap().startPolyline();
     }
 
+    @Override
+    protected void prepareViewing() {
+    	throw new IllegalArgumentException("ReadOnly mode is not supported for " + this.getClass().getSimpleName());
+    }
+    
     protected final LEditableMap getEditableMap() {
         if (editableMap == null) {
             editableMap = new LEditableMap(getMap());
