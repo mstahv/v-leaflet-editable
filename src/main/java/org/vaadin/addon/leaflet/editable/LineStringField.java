@@ -36,6 +36,7 @@ public class LineStringField extends AbstractJTSField<LineString> {
         return LineString.class;
     }
 
+    @Override
     protected void prepareEditing() {
         if (lPolyline == null) {
             lPolyline = new LPolyline();

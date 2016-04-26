@@ -62,6 +62,7 @@ public class PolygonField extends AbstractJTSField<Polygon> implements
         return Polygon.class;
     }
 
+    @Override
     protected void prepareEditing() {
         if (lPolyline == null) {
             lPolyline = new LPolygon();

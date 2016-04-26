@@ -36,6 +36,7 @@ public class LinearRingField extends AbstractJTSField<LinearRing> {
         return LinearRing.class;
     }
 
+    @Override
     protected void prepareEditing() {
         if (lPolyline == null) {
             lPolyline = new LPolygon();
