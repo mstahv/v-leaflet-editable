@@ -305,7 +305,7 @@
         <dependency>
             <groupId>org.vaadin.addon</groupId>
             <artifactId>v-leaflet</artifactId>
-            <version>1.0.0-b6</version>
+            <version>1.0.0-b8-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.peimari</groupId>
