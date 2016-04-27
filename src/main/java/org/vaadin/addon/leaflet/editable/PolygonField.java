@@ -1,24 +1,22 @@
 package org.vaadin.addon.leaflet.editable;
 
+import org.vaadin.addon.leaflet.LPolygon;
+import org.vaadin.addon.leaflet.shared.Bounds;
+import org.vaadin.addon.leaflet.util.JTSUtil;
+
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.AbsoluteLayout;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
-import org.vaadin.addon.leaflet.shared.Bounds;
-
 import com.vividsolutions.jts.geom.Polygon;
-import org.vaadin.addon.leaflet.LPolygon;
-import org.vaadin.addon.leaflet.util.AbstractJTSField;
-import org.vaadin.addon.leaflet.util.JTSUtil;
 
-public class PolygonField extends AbstractJTSField<Polygon> implements
+public class PolygonField extends AbstractEditableJTSField<Polygon> implements
         FeatureDrawnListener {
 
     private LPolygon lPolyline;
-    private LEditableMap editableMap;
+   
     protected Button addHole;
-    private LEditable lEditable;
 
     public PolygonField() {
     }
@@ -90,14 +88,7 @@ public class PolygonField extends AbstractJTSField<Polygon> implements
         getEditableMap().addFeatureDrawnListener(this);
         getEditableMap().startPolygon();
     }
-
-    protected final LEditableMap getEditableMap() {
-        if (editableMap == null) {
-            editableMap = new LEditableMap(getMap());
-        }
-        return editableMap;
-    }
-
+    
     @Override
     public void featureDrawn(FeatureDrawnEvent event) {
         setValue(getCrsTranslator().toModel(
@@ -105,15 +96,4 @@ public class PolygonField extends AbstractJTSField<Polygon> implements
                         .getDrawnFeature())));
         getEditableMap().removeFeatureDrawnListener(this);
     }
-    
-    @Override
-    protected void prepareViewing() {
-    	getEditableMap().remove();
-    	editableMap = null;
-    	if(lEditable != null){
-    		lEditable.remove();
-    		lEditable = null;
-    	}
-    }
-
 }

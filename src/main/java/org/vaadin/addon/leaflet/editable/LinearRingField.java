@@ -1,30 +1,17 @@
 package org.vaadin.addon.leaflet.editable;
 
+import org.vaadin.addon.leaflet.LPolygon;
 import org.vaadin.addon.leaflet.shared.Bounds;
 import org.vaadin.addon.leaflet.shared.Point;
-
-import com.vividsolutions.jts.geom.LinearRing;
-import org.vaadin.addon.leaflet.LPolygon;
-import org.vaadin.addon.leaflet.util.AbstractJTSField;
 import org.vaadin.addon.leaflet.util.JTSUtil;
 
-public class LinearRingField extends AbstractJTSField<LinearRing> {
+import com.vividsolutions.jts.geom.LinearRing;
+
+public class LinearRingField extends AbstractEditableJTSField<LinearRing> {
 
     private LPolygon lPolyline;
-    private LEditableMap editableMap;
-	private LEditable lEditable;
 
     public LinearRingField() {
-        getEditableMap().addFeatureDrawnListener(new FeatureDrawnListener() {
-
-            @Override
-            public void featureDrawn(FeatureDrawnEvent event) {
-                setValue(getCrsTranslator().toModel(
-                        JTSUtil.toLinearRing((LPolygon) event
-                                .getDrawnFeature())));
-
-            }
-        });
     }
 
     public LinearRingField(String caption) {
@@ -60,24 +47,15 @@ public class LinearRingField extends AbstractJTSField<LinearRing> {
 
     @Override
     protected final void prepareDrawing() {
-        getEditableMap().startPolygon();
+    	getEditableMap().addFeatureDrawnListener(this);
+        getEditableMap().startPolygon();     
     }
-
-    @Override
-    protected void prepareViewing() {
-    	getEditableMap().remove();
-    	editableMap = null;
-    	if(lEditable != null){
-    		lEditable.remove();
-    		lEditable = null;
-    	}
-	}
     
-    protected final LEditableMap getEditableMap() {
-        if (editableMap == null) {
-            editableMap = new LEditableMap(getMap());
-        }
-        return editableMap;
+    @Override
+    public void featureDrawn(FeatureDrawnEvent event) {
+        setValue(getCrsTranslator().toModel(
+                JTSUtil.toLinearRing((LPolygon) event
+                        .getDrawnFeature())));
+        getEditableMap().removeFeatureDrawnListener(this);
     }
-
 }
