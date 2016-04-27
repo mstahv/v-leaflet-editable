@@ -12,6 +12,7 @@ public class LineStringField extends AbstractJTSField<LineString> {
 
     private LPolyline lPolyline;
     private LEditableMap editableMap;
+	private LEditable lEditable;
 
     public LineStringField() {
         getEditableMap().addFeatureDrawnListener(new FeatureDrawnListener() {
@@ -45,7 +46,7 @@ public class LineStringField extends AbstractJTSField<LineString> {
         Point[] lPointArray = JTSUtil.toLeafletPointArray(getCrsTranslator()
                 .toPresentation(getInternalValue()));
         lPolyline.setPoints(lPointArray);
-        LEditable lEditable = new LEditable(lPolyline);
+        lEditable = new LEditable(lPolyline);
         lEditable.addFeatureModifiedListener(new FeatureModifiedListener() {
 
             @Override
@@ -64,7 +65,12 @@ public class LineStringField extends AbstractJTSField<LineString> {
 
     @Override
     protected void prepareViewing() {
-    	throw new IllegalArgumentException("ReadOnly mode is not supported for " + this.getClass().getSimpleName());
+    	getEditableMap().remove();
+    	editableMap = null;
+    	if(lEditable != null){
+    		lEditable.remove();
+    		lEditable = null;
+    	}
     }
     
     protected final LEditableMap getEditableMap() {

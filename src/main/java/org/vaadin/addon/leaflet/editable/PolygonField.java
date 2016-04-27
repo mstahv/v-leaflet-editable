@@ -108,7 +108,12 @@ public class PolygonField extends AbstractJTSField<Polygon> implements
     
     @Override
     protected void prepareViewing() {
-    	throw new IllegalArgumentException("ReadOnly mode is not supported for " + this.getClass().getSimpleName());
+    	getEditableMap().remove();
+    	editableMap = null;
+    	if(lEditable != null){
+    		lEditable.remove();
+    		lEditable = null;
+    	}
     }
 
 }
