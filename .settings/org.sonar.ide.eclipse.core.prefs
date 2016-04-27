@@ -1,0 +1,5 @@
+eclipse.preferences.version=1
+extraProperties=sonar.jdbc.username\=sonar\r\nsonar.jdbc.password\=sonar\r\nsonar.jdbc.url\=jdbc\:h2\:tcp\://localhost\:9092/sonar
+projectKey=org.vaadin.addon\:v-leaflet-editable
+serverUrl=http\://localhost\:9000
+version=2

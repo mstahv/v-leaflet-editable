@@ -104,7 +104,7 @@ public class JtsFieldTest extends AbstractTest {
 
 	private TextField name = new TextField("Name");
 	private DateField date = new DateField("Date");
-	private PointField point = new PointField("Point");
+	private PointField point = new PointField("PointField");
 	private LineStringField lineString = new LineStringField("LineStringField");
 	private LinearRingField linearRing = new LinearRingField("LinearRingField");
 	private PolygonField polygon = new PolygonField("PolygonField");
@@ -127,7 +127,7 @@ public class JtsFieldTest extends AbstractTest {
 		editorform.setCaption("Edit JTS pojo:");
 
 		TabSheet jtsFields = new TabSheet(point, lineString , linearRing, polygon);
-		jtsFields.setCaption("JTS fiels:");
+		jtsFields.setCaption("JTS fields:");
 		jtsFields.setSizeFull();
 		editorform.addComponents(new HorizontalLayout(name, date), jtsFields
 		// ,polygon
