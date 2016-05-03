@@ -1,29 +1,17 @@
 package org.vaadin.addon.leaflet.editable;
 
+import org.vaadin.addon.leaflet.LPolygon;
 import org.vaadin.addon.leaflet.shared.Bounds;
 import org.vaadin.addon.leaflet.shared.Point;
-
-import com.vividsolutions.jts.geom.LinearRing;
-import org.vaadin.addon.leaflet.LPolygon;
-import org.vaadin.addon.leaflet.util.AbstractJTSField;
 import org.vaadin.addon.leaflet.util.JTSUtil;
 
-public class LinearRingField extends AbstractJTSField<LinearRing> {
+import com.vividsolutions.jts.geom.LinearRing;
+
+public class LinearRingField extends AbstractEditableJTSField<LinearRing> {
 
     private LPolygon lPolyline;
-    private LEditableMap editableMap;
 
     public LinearRingField() {
-        getEditableMap().addFeatureDrawnListener(new FeatureDrawnListener() {
-
-            @Override
-            public void featureDrawn(FeatureDrawnEvent event) {
-                setValue(getCrsTranslator().toModel(
-                        JTSUtil.toLinearRing((LPolygon) event
-                                .getDrawnFeature())));
-
-            }
-        });
     }
 
     public LinearRingField(String caption) {
@@ -36,6 +24,7 @@ public class LinearRingField extends AbstractJTSField<LinearRing> {
         return LinearRing.class;
     }
 
+    @Override
     protected void prepareEditing() {
         if (lPolyline == null) {
             lPolyline = new LPolygon();
@@ -44,7 +33,7 @@ public class LinearRingField extends AbstractJTSField<LinearRing> {
         Point[] lPointArray = JTSUtil.toLeafletPointArray(getCrsTranslator()
                 .toPresentation(getInternalValue()));
         lPolyline.setPoints(lPointArray);
-        LEditable lEditable = new LEditable(lPolyline);
+        lEditable = new LEditable(lPolyline);
         lEditable.addFeatureModifiedListener(new FeatureModifiedListener() {
 
             @Override
@@ -58,14 +47,15 @@ public class LinearRingField extends AbstractJTSField<LinearRing> {
 
     @Override
     protected final void prepareDrawing() {
-        getEditableMap().startPolygon();
+    	getEditableMap().addFeatureDrawnListener(this);
+        getEditableMap().startPolygon();     
     }
-
-    protected final LEditableMap getEditableMap() {
-        if (editableMap == null) {
-            editableMap = new LEditableMap(getMap());
-        }
-        return editableMap;
+    
+    @Override
+    public void featureDrawn(FeatureDrawnEvent event) {
+        setValue(getCrsTranslator().toModel(
+                JTSUtil.toLinearRing((LPolygon) event
+                        .getDrawnFeature())));
+        getEditableMap().removeFeatureDrawnListener(this);
     }
-
 }

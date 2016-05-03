@@ -25,6 +25,7 @@ import org.vaadin.addon.leaflet.editable.LineStringField;
 import org.vaadin.addon.leaflet.editable.LinearRingField;
 import org.vaadin.addon.leaflet.editable.PolygonField;
 import org.vaadin.addonhelpers.AbstractTest;
+import org.vaadin.viritin.layouts.MHorizontalLayout;
 
 public class JtsFieldTest extends AbstractTest {
 
@@ -103,7 +104,7 @@ public class JtsFieldTest extends AbstractTest {
 
 	private TextField name = new TextField("Name");
 	private DateField date = new DateField("Date");
-	private PointField point = new PointField("Point");
+	private PointField point = new PointField("PointField");
 	private LineStringField lineString = new LineStringField("LineStringField");
 	private LinearRingField linearRing = new LinearRingField("LinearRingField");
 	private PolygonField polygon = new PolygonField("PolygonField");
@@ -126,7 +127,7 @@ public class JtsFieldTest extends AbstractTest {
 		editorform.setCaption("Edit JTS pojo:");
 
 		TabSheet jtsFields = new TabSheet(point, lineString , linearRing, polygon);
-		jtsFields.setCaption("JTS fiels:");
+		jtsFields.setCaption("JTS fields:");
 		jtsFields.setSizeFull();
 		editorform.addComponents(new HorizontalLayout(name, date), jtsFields
 		// ,polygon
@@ -139,7 +140,8 @@ public class JtsFieldTest extends AbstractTest {
 		beanFieldGroup.setItemDataSource(pojo);
 		beanFieldGroup.bindMemberFields(this);
 
-		editorform.addComponent(new Button("Save", new ClickListener() {
+		MHorizontalLayout buttonLayout = new MHorizontalLayout();
+		buttonLayout.addComponent(new Button("Save", new ClickListener() {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
@@ -151,7 +153,17 @@ public class JtsFieldTest extends AbstractTest {
 				}
 			}
 		}));
-
+		
+		buttonLayout.addComponent(new Button("Toggle read only", new ClickListener() {
+			@Override
+			public void buttonClick(ClickEvent event) {
+				beanFieldGroup.setReadOnly(!beanFieldGroup.isReadOnly());
+				
+			}
+		}));
+		
+		editorform.addComponent(buttonLayout);
+		
 		horizontalLayout.addComponents(editorform, display);
 		horizontalLayout.setExpandRatio(editorform, 1);
 		horizontalLayout.setExpandRatio(display, 1);
