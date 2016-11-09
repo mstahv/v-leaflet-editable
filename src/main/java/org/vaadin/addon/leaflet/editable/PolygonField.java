@@ -85,6 +85,11 @@ public class PolygonField extends AbstractEditableJTSField<Polygon> implements
 
     @Override
     protected final void prepareDrawing() {
+        if(lPolyline != null) {
+            map.removeLayer(lPolyline);
+            lPolyline = null;
+        }
+
         getEditableMap().addFeatureDrawnListener(this);
         getEditableMap().startPolygon();
     }

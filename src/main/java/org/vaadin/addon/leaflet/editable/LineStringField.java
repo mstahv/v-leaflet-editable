@@ -47,6 +47,11 @@ public class LineStringField extends AbstractEditableJTSField<LineString> {
     
     @Override
     protected final void prepareDrawing() {
+        if(lPolyline != null) {
+            map.removeLayer(lPolyline);
+            lPolyline = null;
+        }
+            
     	getEditableMap().addFeatureDrawnListener(this);
         getEditableMap().startPolyline();
     }

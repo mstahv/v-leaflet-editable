@@ -47,10 +47,15 @@ public class LinearRingField extends AbstractEditableJTSField<LinearRing> {
 
     @Override
     protected final void prepareDrawing() {
-    	getEditableMap().addFeatureDrawnListener(this);
-        getEditableMap().startPolygon();     
+        if (lPolyline != null) {
+            map.removeLayer(lPolyline);
+            lPolyline = null;
+        }
+
+        getEditableMap().addFeatureDrawnListener(this);
+        getEditableMap().startPolygon();
     }
-    
+
     @Override
     public void featureDrawn(FeatureDrawnEvent event) {
         setValue(getCrsTranslator().toModel(
