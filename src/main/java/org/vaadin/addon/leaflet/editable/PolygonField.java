@@ -101,4 +101,10 @@ public class PolygonField extends AbstractEditableJTSField<Polygon> implements
                         .getDrawnFeature())));
         getEditableMap().removeFeatureDrawnListener(this);
     }
+    
+    @Override
+    protected void prepareViewing() {
+        super.prepareViewing();
+        getAddHoleButton().setEnabled(false);
+   }
 }
