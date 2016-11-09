@@ -37,22 +37,23 @@ public class TogglingEditing extends AbstractTest implements
         leafletMap.addLayer(new LTileLayer(
                 "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"));
 
-
         polygon = new LPolygon(new Point(0, 0), new Point(30, 30),
                 new Point(30, 0));
 
         leafletMap.addComponents(polygon);
-        
-        leafletMap.addClickListener(new LeafletClickListener() {
+        clickListener = new LeafletClickListener() {
 
             @Override
             public void onClick(LeafletClickEvent event) {
                 System.out.println("Clicked");
             }
-        });
+        };
+
+        leafletMap.addClickListener(clickListener);
 
         return leafletMap;
     }
+    private LeafletClickListener clickListener;
 
     @Override
     protected void setup() {
@@ -68,6 +69,7 @@ public class TogglingEditing extends AbstractTest implements
 
                     @Override
                     public void buttonClick(ClickEvent event) {
+                        leafletMap.removeClickListener(clickListener);
                         if (lEditing != null && lEditing.getParent() != null) {
                             lEditing.remove();
                         }
@@ -78,6 +80,7 @@ public class TogglingEditing extends AbstractTest implements
                             public void featureModified(
                                     FeatureModifiedEvent event) {
                                 Notification.show("Modified :" + ((AbstractLeafletVector) c).getGeometry().toText());
+                                leafletMap.addClickListener(clickListener);
                             }
                         });
                     }
@@ -88,23 +91,38 @@ public class TogglingEditing extends AbstractTest implements
 
         tools.addComponent(new Button("Stop editing",
                 new Button.ClickListener() {
-                    @Override
-                    public void buttonClick(ClickEvent event) {
-                        if (lEditing.getParent() != null) {
-                            lEditing.remove();
-                        }
-                    }
-                }));
+            @Override
+            public void buttonClick(ClickEvent event) {
+                if (lEditing.getParent() != null) {
+                    lEditing.remove();
+                    leafletMap.addClickListener(clickListener);
+                }
+            }
+        }));
 
         tools.addComponent(new Button("Add hole",
                 new Button.ClickListener() {
+            @Override
+            public void buttonClick(ClickEvent event) {
+                if (lEditing != null && lEditing.getParent() != null) {
+                    lEditing.remove();
+                }
+                lEditing = new LEditable(polygon);
+                lEditing.newHole();
+                leafletMap.zoomToContent(polygon);
+                leafletMap.removeClickListener(clickListener);
+                lEditing.addFeatureModifiedListener(new FeatureModifiedListener() {
+
                     @Override
-                    public void buttonClick(ClickEvent event) {
-                        lEditing = new LEditable(polygon);
-                        lEditing.newHole();
-                        leafletMap.zoomToContent(polygon);
+                    public void featureModified(
+                            FeatureModifiedEvent event) {
+                        Notification.show("Modified :" + ((AbstractLeafletVector) event.getModifiedFeature()).getGeometry().toText());
+                        leafletMap.addClickListener(clickListener);
                     }
-                }));
+                });
+
+            }
+        }));
 
         content.addComponent(tools);
 
