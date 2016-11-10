@@ -50,7 +50,7 @@ public class EditableMapConnector extends AbstractExtensionConnector {
             @Override
             public void execute() {
                 getMap().removeCreatedListeners();
-                
+
                 if (hasEventListener("featureDrawn")) {
                     getMap().addCreatedListener(new FeatureCreatedListener() {
 
@@ -60,7 +60,7 @@ public class EditableMapConnector extends AbstractExtensionConnector {
                             rpc.
                                     vectorCreated(event.getLayer().
                                             toGeoJSONString());
-                        // remove created layer lazily (server side should add it back if needed
+                            // remove created layer lazily (server side should add it back if needed
                             // TODO lazily
                             LayerGroup lg = getMap().getNewFeatureLayer();
                             lg.removeLayer(event.getLayer());
@@ -81,6 +81,8 @@ public class EditableMapConnector extends AbstractExtensionConnector {
     @Override
     public void onUnregister() {
         super.onUnregister();
+        map.removeCreatedListeners();
+        map.stopDrawing();
     }
 
 }
