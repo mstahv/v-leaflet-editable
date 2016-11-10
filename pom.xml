@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.vaadin.addon</groupId>
     <artifactId>v-leaflet-editable</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.1</version>
     <name>V-Leaflet-Editable</name>
     
     <properties>
@@ -20,7 +20,7 @@
         <url>git://github.com/mstahv/v-leaflet-editable.git</url>
         <connection>scm:git:git://github.com/mstahv/v-leaflet-editable.git</connection>
         <developerConnection>scm:git:ssh://git@github.com:/mstahv/v-leaflet-editable.git</developerConnection>
-      <tag>HEAD</tag>
+      <tag>v-leaflet-editable-1.0.1</tag>
   </scm>
 
     <issueManagement>
