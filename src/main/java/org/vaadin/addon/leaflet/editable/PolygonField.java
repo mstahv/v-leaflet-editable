@@ -56,17 +56,12 @@ public class PolygonField extends AbstractEditableJTSField<Polygon> implements
     }
 
     @Override
-    public Class<? extends Polygon> getType() {
-        return Polygon.class;
-    }
-
-    @Override
     protected void prepareEditing() {
         if (lPolyline == null) {
             lPolyline = new LPolygon();
             map.addLayer(lPolyline);
         }
-        final Polygon internalValue = getInternalValue();
+        final Polygon internalValue = getValue();
         final Polygon toPresentation = getCrsTranslator()
                 .toPresentation(internalValue);
         lPolyline.setGeometry(toPresentation);

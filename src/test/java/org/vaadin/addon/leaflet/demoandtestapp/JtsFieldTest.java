@@ -1,12 +1,17 @@
 package org.vaadin.addon.leaflet.demoandtestapp;
 
-import java.util.Date;
+import java.time.LocalDate;
 
+import org.vaadin.addon.leaflet.editable.LineStringField;
+import org.vaadin.addon.leaflet.editable.LinearRingField;
+import org.vaadin.addon.leaflet.editable.PolygonField;
 import org.vaadin.addon.leaflet.util.PointField;
+import org.vaadin.addonhelpers.AbstractTest;
+import org.vaadin.viritin.layouts.MHorizontalLayout;
 
-import com.vaadin.data.fieldgroup.BeanFieldGroup;
-import com.vaadin.data.fieldgroup.FieldGroup.CommitException;
-import com.vaadin.shared.ui.label.ContentMode;
+import com.vaadin.data.Binder;
+import com.vaadin.data.ValidationException;
+import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -21,17 +26,12 @@ import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.geom.LinearRing;
 import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.Polygon;
-import org.vaadin.addon.leaflet.editable.LineStringField;
-import org.vaadin.addon.leaflet.editable.LinearRingField;
-import org.vaadin.addon.leaflet.editable.PolygonField;
-import org.vaadin.addonhelpers.AbstractTest;
-import org.vaadin.viritin.layouts.MHorizontalLayout;
 
 public class JtsFieldTest extends AbstractTest {
 
 	public static class JtsPojo {
 		private String name;
-		private Date date;
+		private LocalDate date;
 		private Point point;
 		private LineString lineString;
 		private LinearRing linearRing;
@@ -45,11 +45,11 @@ public class JtsFieldTest extends AbstractTest {
 			this.name = name;
 		}
 
-		public Date getDate() {
+		public LocalDate getDate() {
 			return date;
 		}
 
-		public void setDate(Date date) {
+		public void setDate(LocalDate date) {
 			this.date = date;
 		}
 
@@ -109,6 +109,8 @@ public class JtsFieldTest extends AbstractTest {
 	private LinearRingField linearRing = new LinearRingField("LinearRingField");
 	private PolygonField polygon = new PolygonField("PolygonField");
 
+	private boolean readOnly = false;
+	
 	@Override
 	public Component getTestComponent() {
 		content.setMargin(true);
@@ -134,21 +136,23 @@ public class JtsFieldTest extends AbstractTest {
 				);
 		editorform.setExpandRatio(jtsFields, 1);
 
-		// TODO switch to helper in Vaadin when available http://dev.vaadin.com/ticket/13068
-		final BeanFieldGroup<JtsPojo> beanFieldGroup = new BeanFieldGroup<JtsPojo>(
-				JtsPojo.class);
-		beanFieldGroup.setItemDataSource(pojo);
-		beanFieldGroup.bindMemberFields(this);
-
+		Binder<JtsPojo> binder = new Binder<>(JtsPojo.class);
+		binder.bind(name, JtsPojo::getName, JtsPojo::setName);
+		binder.bind(date, JtsPojo::getDate, JtsPojo::setDate);
+		binder.bind(point, JtsPojo::getPoint, JtsPojo::setPoint);
+		binder.bind(lineString, JtsPojo::getLineString, JtsPojo::setLineString);
+		binder.bind(linearRing, JtsPojo::getLinearRing, JtsPojo::setLinearRing);
+		binder.bind(polygon, JtsPojo::getPolygon, JtsPojo::setPolygon);
+		
 		MHorizontalLayout buttonLayout = new MHorizontalLayout();
 		buttonLayout.addComponent(new Button("Save", new ClickListener() {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
 				try {
-					beanFieldGroup.commit();
+					binder.writeBean(pojo);
 					display.setValue(pojo.toString());
-				} catch (CommitException e) {
+				} catch (ValidationException e) {
 					e.printStackTrace();
 				}
 			}
@@ -157,8 +161,8 @@ public class JtsFieldTest extends AbstractTest {
 		buttonLayout.addComponent(new Button("Toggle read only", new ClickListener() {
 			@Override
 			public void buttonClick(ClickEvent event) {
-				beanFieldGroup.setReadOnly(!beanFieldGroup.isReadOnly());
-				
+				readOnly = !readOnly;
+				binder.setReadOnly(readOnly);			
 			}
 		}));
 		

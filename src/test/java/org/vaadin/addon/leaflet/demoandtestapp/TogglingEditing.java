@@ -1,5 +1,6 @@
 package org.vaadin.addon.leaflet.demoandtestapp;
 
+import com.vaadin.shared.Registration;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -49,11 +50,12 @@ public class TogglingEditing extends AbstractTest implements
             }
         };
 
-        leafletMap.addClickListener(clickListener);
+        clickListenerRegistration = leafletMap.addClickListener(clickListener);
 
         return leafletMap;
     }
     private LeafletClickListener clickListener;
+	private Registration clickListenerRegistration;
 
     @Override
     protected void setup() {
@@ -69,7 +71,7 @@ public class TogglingEditing extends AbstractTest implements
 
                     @Override
                     public void buttonClick(ClickEvent event) {
-                        leafletMap.removeClickListener(clickListener);
+                        clickListenerRegistration.remove();
                         if (lEditing != null && lEditing.getParent() != null) {
                             lEditing.remove();
                         }
@@ -80,7 +82,7 @@ public class TogglingEditing extends AbstractTest implements
                             public void featureModified(
                                     FeatureModifiedEvent event) {
                                 Notification.show("Modified :" + ((AbstractLeafletVector) c).getGeometry().toText());
-                                leafletMap.addClickListener(clickListener);
+                                clickListenerRegistration = leafletMap.addClickListener(clickListener);
                             }
                         });
                     }
@@ -95,7 +97,7 @@ public class TogglingEditing extends AbstractTest implements
             public void buttonClick(ClickEvent event) {
                 if (lEditing.getParent() != null) {
                     lEditing.remove();
-                    leafletMap.addClickListener(clickListener);
+                    clickListenerRegistration = leafletMap.addClickListener(clickListener);
                 }
             }
         }));
@@ -110,14 +112,14 @@ public class TogglingEditing extends AbstractTest implements
                 lEditing = new LEditable(polygon);
                 lEditing.newHole();
                 leafletMap.zoomToContent(polygon);
-                leafletMap.removeClickListener(clickListener);
+                clickListenerRegistration.remove();
                 lEditing.addFeatureModifiedListener(new FeatureModifiedListener() {
 
                     @Override
                     public void featureModified(
                             FeatureModifiedEvent event) {
                         Notification.show("Modified :" + ((AbstractLeafletVector) event.getModifiedFeature()).getGeometry().toText());
-                        leafletMap.addClickListener(clickListener);
+                        clickListenerRegistration = leafletMap.addClickListener(clickListener);
                     }
                 });
 
