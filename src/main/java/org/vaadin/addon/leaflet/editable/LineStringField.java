@@ -46,8 +46,8 @@ public class LineStringField extends AbstractEditableJTSField<LineString> {
             map.removeLayer(lPolyline);
             lPolyline = null;
         }
-            
-    	getEditableMap().addFeatureDrawnListener(this);
+        
+        featureDrawnListenerReg = getEditableMap().addFeatureDrawnListener(this);
         getEditableMap().startPolyline();
     }
     
@@ -56,6 +56,6 @@ public class LineStringField extends AbstractEditableJTSField<LineString> {
         setValue(getCrsTranslator().toModel(
                 JTSUtil.toLineString((LPolyline) event
                         .getDrawnFeature())));
-        getEditableMap().removeFeatureDrawnListener(this);
+        featureDrawnListenerReg.remove();
     }
 }

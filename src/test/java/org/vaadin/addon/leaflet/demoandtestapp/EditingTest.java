@@ -15,7 +15,7 @@ import org.vaadin.addonhelpers.AbstractTest;
 import org.vaadin.viritin.layouts.MHorizontalLayout;
 
 public class EditingTest extends AbstractTest implements
-        FeatureModifiedListener {
+        FeatureModifiedListener  {
 
     private LPolygon polygon;
 
@@ -103,6 +103,8 @@ public class EditingTest extends AbstractTest implements
                     }
                 }));
 
+        tools.addComponent(new Button("Dummy button"));
+        
         content.addComponent(tools);
 
         leafletMap.setSizeFull();

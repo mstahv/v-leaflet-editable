@@ -1,6 +1,7 @@
 package org.vaadin.addon.leaflet.editable;
 
 import com.vaadin.server.AbstractExtension;
+import com.vaadin.shared.Registration;
 import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.geom.Polygon;
 import org.vaadin.addon.leaflet.LeafletLayer;
@@ -20,34 +21,30 @@ import org.vaadin.addon.leaflet.editable.client.EditableMapServerRcp;
  */
 public class LEditableMap extends AbstractExtension {
 
-	public void addFeatureDrawnListener(FeatureDrawnListener listener) {
-		addListener("featureDrawn", FeatureDrawnEvent.class, listener,
-				FeatureDrawnListener.drawnMethod);
+    public Registration addFeatureDrawnListener(FeatureDrawnListener listener) {
+        Registration registration = addListener("featureDrawn", FeatureDrawnEvent.class, listener,
+                FeatureDrawnListener.drawnMethod);
         markAsDirty();
-	}
+        return registration;
+    }
 
-	public void removeFeatureDrawnListener(FeatureDrawnListener listener) {
-		removeListener("featureDrawn",FeatureDrawnEvent.class, listener);
-        markAsDirty();
-	}
+    public LEditableMap(LMap map) {
+        extend(map);
+        registerRpc();
+    }
 
-	public LEditableMap(LMap map) {
-		extend(map);
-		registerRpc();
-	}
-
-	private void registerRpc() {
-		registerRpc(new EditableMapServerRcp() {
+    private void registerRpc() {
+        registerRpc(new EditableMapServerRcp() {
 
             @Override
             public void vectorCreated(String geojson) {
-                
-				try {
+
+                try {
                     FeatureJSON featureJSON = new FeatureJSON();
                     SimpleFeature readFeature = featureJSON.readFeature(geojson);
-                    
+
                     Object defaultGeometry = readFeature.getDefaultGeometry();
-                    
+
                     LeafletLayer createdLayer;
                     if (defaultGeometry instanceof Polygon) {
                         createdLayer = new LPolygon((Polygon) defaultGeometry);
@@ -56,26 +53,26 @@ public class LEditableMap extends AbstractExtension {
                     } else {
                         throw new IllegalArgumentException("Unknown geometry");
                     }
-    				fireEvent(new FeatureDrawnEvent(LEditableMap.this, createdLayer));
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-		}
+                    fireEvent(new FeatureDrawnEvent(LEditableMap.this, createdLayer));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
 
-		});
-	}
+        });
+    }
 
-	@Override
-	public void remove() {
-		if (getParent() != null) {
-			super.remove();
-		}
-	}
+    @Override
+    public void remove() {
+        if (getParent() != null) {
+            super.remove();
+        }
+    }
 
     public void startPolygon() {
         getRpcProxy(EditableMapClientRcp.class).startPolygon();
     }
-    
+
     public void startPolyline() {
         getRpcProxy(EditableMapClientRcp.class).startPolyline();
     }

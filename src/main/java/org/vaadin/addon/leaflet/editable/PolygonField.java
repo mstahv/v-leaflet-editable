@@ -15,7 +15,7 @@ public class PolygonField extends AbstractEditableJTSField<Polygon> implements
         FeatureDrawnListener {
 
     private LPolygon lPolyline;
-   
+
     protected Button addHole;
 
     public PolygonField() {
@@ -80,26 +80,27 @@ public class PolygonField extends AbstractEditableJTSField<Polygon> implements
 
     @Override
     protected final void prepareDrawing() {
-        if(lPolyline != null) {
+        if (lPolyline != null) {
             map.removeLayer(lPolyline);
             lPolyline = null;
         }
 
-        getEditableMap().addFeatureDrawnListener(this);
+        featureDrawnListenerReg = getEditableMap().addFeatureDrawnListener(this);
         getEditableMap().startPolygon();
     }
-    
+
     @Override
     public void featureDrawn(FeatureDrawnEvent event) {
         setValue(getCrsTranslator().toModel(
                 JTSUtil.toPolygon((LPolygon) event
                         .getDrawnFeature())));
-        getEditableMap().removeFeatureDrawnListener(this);
+        featureDrawnListenerReg.remove();
     }
-    
+
     @Override
     protected void prepareViewing() {
         super.prepareViewing();
         getAddHoleButton().setEnabled(false);
-   }
+    }
+    
 }

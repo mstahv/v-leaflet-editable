@@ -1,15 +1,19 @@
 package org.vaadin.addon.leaflet.editable;
 
-import org.vaadin.addon.leaflet.LPolygon;
+import com.vividsolutions.jts.geom.CoordinateList;
+import com.vividsolutions.jts.geom.GeometryFactory;
+import com.vividsolutions.jts.geom.LineString;
 import org.vaadin.addon.leaflet.shared.Bounds;
 import org.vaadin.addon.leaflet.shared.Point;
 import org.vaadin.addon.leaflet.util.JTSUtil;
 
 import com.vividsolutions.jts.geom.LinearRing;
+import com.vividsolutions.jts.geom.PrecisionModel;
+import org.vaadin.addon.leaflet.LPolyline;
 
 public class LinearRingField extends AbstractEditableJTSField<LinearRing> {
 
-    private LPolygon lPolyline;
+    private LPolyline lPolyline;
 
     public LinearRingField() {
     }
@@ -22,7 +26,7 @@ public class LinearRingField extends AbstractEditableJTSField<LinearRing> {
     @Override
     protected void prepareEditing() {
         if (lPolyline == null) {
-            lPolyline = new LPolygon();
+            lPolyline = new LPolyline();
             map.addLayer(lPolyline);
         }
         Point[] lPointArray = JTSUtil.toLeafletPointArray(getCrsTranslator()
@@ -47,15 +51,20 @@ public class LinearRingField extends AbstractEditableJTSField<LinearRing> {
             lPolyline = null;
         }
 
-        getEditableMap().addFeatureDrawnListener(this);
-        getEditableMap().startPolygon();
+        featureDrawnListenerReg = getEditableMap().addFeatureDrawnListener(this);
+        getEditableMap().startPolyline();
     }
 
     @Override
     public void featureDrawn(FeatureDrawnEvent event) {
-        setValue(getCrsTranslator().toModel(
-                JTSUtil.toLinearRing((LPolygon) event
-                        .getDrawnFeature())));
-        getEditableMap().removeFeatureDrawnListener(this);
+        LPolyline drawnFeature = (LPolyline) event.getDrawnFeature();
+        LineString str = (LineString) drawnFeature.getGeometry();
+        CoordinateList coordinateList = new CoordinateList(str.getCoordinates());
+        coordinateList.closeRing();
+        GeometryFactory factory = new GeometryFactory(new PrecisionModel(),
+                4326);
+        LinearRing ring = factory.createLinearRing(coordinateList.toCoordinateArray());
+        setValue(getCrsTranslator().toModel(ring));
+        featureDrawnListenerReg.remove();
     }
 }

@@ -20,74 +20,77 @@ import org.vaadin.addon.leaflet.editable.LEditable;
 
 @Connect(LEditable.class)
 public class EditableConnector extends AbstractExtensionConnector {
-    
-	static {
-		LeafletEditableResourceInjector.ensureInjected();
-	}
 
-	private final EditableServerRcp rpc = RpcProxy.create(EditableServerRcp.class, this);
+    static {
+        LeafletEditableResourceInjector.ensureInjected();
+    }
 
-	private EditableFeature ef;
+    private final EditableServerRcp rpc = RpcProxy.create(EditableServerRcp.class, this);
 
-	@Override
-	protected void extend(final ServerConnector target) {
+    private EditableFeature ef;
+
+    @Override
+    protected void extend(final ServerConnector target) {
         registerRpc(EditableClientRcp.class, new EditableClientRcp() {
 
-			@Override
-			public void newHole() {
-				Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+            @Override
+            public void newHole() {
+                Scheduler.get().scheduleDeferred(new ScheduledCommand() {
 
-					@Override
-					public void execute() {
-						getFeature().newHole();
-					}
-				});
-			}
-		});
-	}
+                    @Override
+                    public void execute() {
+                        getFeature().newHole();
+                    }
+                });
+            }
+        });
+    }
 
-	@Override
-	public void onStateChanged(StateChangeEvent stateChangeEvent) {
-		Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+    @Override
+    public void onStateChanged(StateChangeEvent stateChangeEvent) {
+        if(!stateChangeEvent.isInitialStateChange()) {
+            return;
+        }
+        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
 
-			@Override
-			public void execute() {
-				final AbstractLeafletLayerConnector c = (AbstractLeafletLayerConnector) getParent();
-				ef = (EditableFeature) c.getLayer();
+            @Override   
+            public void execute() {
+                final AbstractLeafletLayerConnector c = (AbstractLeafletLayerConnector) getParent();
+                ef = (EditableFeature) c.getLayer();
 
-				ef.addEditListener(new FeatureEditedListener() {
+                ef.addEditListener(new FeatureEditedListener() {
 
-					@Override
-					public void onEdit() {
-						if(isEnabled() && ef.isEnabled()) {
-							if (c instanceof LeafletCircleConnector) {
-								Circle circle = (Circle) c.getLayer();
-								rpc.circleModified(c, U.toPoint(circle.getLatLng()), circle.getRadius());
+                    @Override
+                    public void onEdit() {
+                        if (isEnabled() && ef.isEnabled()) {
+                            if (c instanceof LeafletCircleConnector) {
+                                Circle circle = (Circle) c.getLayer();
+                                rpc.circleModified(c, U.toPoint(circle.getLatLng()), circle.getRadius());
 
-							} else {
-								// Polyline/gon
-								Polyline p = (Polyline) c.getLayer();
-								rpc.vectorModified(c, p.toGeoJSONString());
-							}
-						}
-					}
-				});
-				ef.enableEdit();
-			}
-		});
-	}
+                            } else {
+                                // Polyline/gon
+                                Polyline p = (Polyline) c.getLayer();
+                                rpc.vectorModified(c, p.toGeoJSONString());
+                            }
+                        }
+                    }
+                });
+                ef.enableEdit();
+            }
+        });
+    }
 
-	public EditableFeature getFeature() {
-		AbstractLeafletVectorConnector parent = (AbstractLeafletVectorConnector) getParent();
-		ef = (EditableFeature) parent.getLayer();
-		return ef;
-	}
-	
-	@Override
-	public void onUnregister() {
-		super.onUnregister();
-		ef.disableEdit();
+    public EditableFeature getFeature() {
+        AbstractLeafletVectorConnector parent = (AbstractLeafletVectorConnector) getParent();
+        ef = (EditableFeature) parent.getLayer();
+        return ef;
+    }
+
+    @Override
+    public void onUnregister() {
+        super.onUnregister();
+        ef.disableEdit();
         ef.removeEditListener();
-	}
+    }
 
 }

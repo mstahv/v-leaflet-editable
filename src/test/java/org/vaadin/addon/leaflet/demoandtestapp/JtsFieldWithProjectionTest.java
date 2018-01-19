@@ -1,6 +1,5 @@
 package org.vaadin.addon.leaflet.demoandtestapp;
 
-import java.time.LocalDate;
 
 import org.geotools.geometry.jts.JTS;
 import org.geotools.referencing.CRS;
@@ -32,82 +31,14 @@ import com.vaadin.ui.VerticalLayout;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.LineString;
-import com.vividsolutions.jts.geom.LinearRing;
 import com.vividsolutions.jts.geom.Point;
-import com.vividsolutions.jts.geom.Polygon;
 import com.vividsolutions.jts.geom.PrecisionModel;
 
 public class JtsFieldWithProjectionTest extends AbstractTest {
 
 	private static final int EPSG_3067 = 3067;
 
-	public static class JtsPojo {
-		private String name;
-		private LocalDate date;
-		private Point point;
-		private LineString lineString;
-		private LinearRing linearRing;
-		private Polygon polygon;
-
-		public String getName() {
-			return name;
-		}
-
-		public void setName(String name) {
-			this.name = name;
-		}
-
-		public LocalDate getDate() {
-			return date;
-		}
-
-		public void setDate(LocalDate date) {
-			this.date = date;
-		}
-
-		public Point getPoint() {
-			return point;
-		}
-
-		public void setPoint(Point point) {
-			this.point = point;
-		}
-
-		public LineString getLineString() {
-			return lineString;
-		}
-
-		public void setLineString(LineString lineString) {
-			this.lineString = lineString;
-		}
-
-		public Polygon getPolygon() {
-			return polygon;
-		}
-
-		public void setPolygon(Polygon polygon) {
-			this.polygon = polygon;
-		}
-
-		@Override
-		public String toString() {
-			return "JtsPojo [\n name=" + name + ",\n date=" + date
-					+ ",\n point=" + point + ",\n lineString=" + lineString
-					+ ",\n linearRing=" + linearRing + ",\n polygon=" + polygon
-					+ "\n]";
-		}
-
-		public LinearRing getLinearRing() {
-			return linearRing;
-		}
-
-		public void setLinearRing(LinearRing linearRing) {
-			this.linearRing = linearRing;
-		}
-	}
-
-	@Override
+        @Override
 	public String getDescription() {
 		return "A test for JTS Field implementations with custom projection";
 	}

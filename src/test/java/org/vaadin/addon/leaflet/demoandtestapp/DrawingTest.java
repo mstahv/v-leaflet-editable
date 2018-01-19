@@ -8,8 +8,6 @@ import com.vaadin.ui.Notification;
 import org.vaadin.addon.leaflet.*;
 import org.vaadin.addon.leaflet.editable.FeatureDrawnEvent;
 import org.vaadin.addon.leaflet.editable.FeatureDrawnListener;
-import org.vaadin.addon.leaflet.editable.FeatureModifiedEvent;
-import org.vaadin.addon.leaflet.editable.FeatureModifiedListener;
 import org.vaadin.addon.leaflet.editable.LEditableMap;
 import org.vaadin.addonhelpers.AbstractTest;
 import org.vaadin.viritin.layouts.MHorizontalLayout;
