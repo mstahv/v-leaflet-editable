@@ -20,18 +20,13 @@ public class LineStringField extends AbstractEditableJTSField<LineString> {
     }
 
     @Override
-    public Class<? extends LineString> getType() {
-        return LineString.class;
-    }
-
-    @Override
     protected void prepareEditing() {
         if (lPolyline == null) {
             lPolyline = new LPolyline();
             map.addLayer(lPolyline);
         }
         Point[] lPointArray = JTSUtil.toLeafletPointArray(getCrsTranslator()
-                .toPresentation(getInternalValue()));
+                .toPresentation(getValue()));
         lPolyline.setPoints(lPointArray);
         lEditable = new LEditable(lPolyline);
         lEditable.addFeatureModifiedListener(new FeatureModifiedListener() {
