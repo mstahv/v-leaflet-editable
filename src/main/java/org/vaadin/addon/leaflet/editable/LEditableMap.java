@@ -17,7 +17,6 @@ import org.vaadin.addon.leaflet.editable.client.EditableMapServerRcp;
 
 /**
  * Extension for LMap to start drawing new vectors.
- * <p>
  */
 public class LEditableMap extends AbstractExtension {
 

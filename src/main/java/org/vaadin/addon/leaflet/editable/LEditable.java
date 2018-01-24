@@ -19,10 +19,10 @@ import org.vaadin.addon.leaflet.LPolyline;
 
 /**
  * Editing extension for Leaflet vectors.
- * <p>
- * Can be used to edit just a specific layer. The constructor adds the extension
+ * 
+ * <p>Can be used to edit just a specific layer. The constructor adds the extension
  * to {@link AbstractLeafletVector}. The extension is automatically removed
- * after first edit event or on removal.
+ * after first edit event or on removal.</p>
  *
  */
 public class LEditable extends AbstractExtension {

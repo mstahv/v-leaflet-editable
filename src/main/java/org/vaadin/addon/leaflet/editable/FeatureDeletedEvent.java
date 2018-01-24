@@ -4,10 +4,6 @@ package org.vaadin.addon.leaflet.editable;
 import java.util.EventObject;
 import org.vaadin.addon.leaflet.LeafletLayer;
 
-/**
- *
- * @author Matti Tahvonen <matti@vaadin.com>
- */
 public class FeatureDeletedEvent extends EventObject {
     private LeafletLayer deleted;
 

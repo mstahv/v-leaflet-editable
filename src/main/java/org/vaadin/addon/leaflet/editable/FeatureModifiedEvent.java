@@ -5,10 +5,6 @@ import com.vaadin.server.AbstractClientConnector;
 import java.util.EventObject;
 import org.vaadin.addon.leaflet.LeafletLayer;
 
-/**
- *
- * @author Matti Tahvonen <matti@vaadin.com>
- */
 public class FeatureModifiedEvent extends EventObject {
     private LeafletLayer modifiedLayer;
 

@@ -5,10 +5,6 @@ import com.vaadin.shared.Connector;
 import java.util.EventObject;
 import org.vaadin.addon.leaflet.LeafletLayer;
 
-/**
- *
- * @author Matti Tahvonen <matti@vaadin.com>
- */
 public class FeatureDrawnEvent extends EventObject {
     private LeafletLayer drawnLayer;
 

@@ -15,10 +15,6 @@
  */
 package org.vaadin.addon.leaflet.editable;
 
-/**
- *
- * @author Matti Tahvonen <matti@vaadin.com>
- */
 public interface FeatureDeletedListener {
 
     public void featureDeleted(FeatureDeletedEvent event);

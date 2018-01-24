@@ -18,10 +18,6 @@ package org.vaadin.addon.leaflet.editable;
 import com.vaadin.util.ReflectTools;
 import java.lang.reflect.Method;
 
-/**
- *
- * @author Matti Tahvonen
- */
 public interface FeatureDrawnListener {
     public static final Method drawnMethod = ReflectTools.findMethod(FeatureDrawnListener.class,
             "featureDrawn", FeatureDrawnEvent.class);
