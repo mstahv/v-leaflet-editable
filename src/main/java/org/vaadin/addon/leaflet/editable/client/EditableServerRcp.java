@@ -7,6 +7,8 @@ import com.vaadin.shared.annotations.Delayed;
 import com.vaadin.shared.communication.ServerRpc;
 
 public interface EditableServerRcp extends ServerRpc {
+    
+        public void ping();
 
 	@Delayed(lastOnly=true)
 	public void circleModified(Connector cc, Point latLng, double radius);

@@ -48,17 +48,19 @@ public class EditableConnector extends AbstractExtensionConnector {
 
     @Override
     public void onStateChanged(StateChangeEvent stateChangeEvent) {
-        if(!stateChangeEvent.isInitialStateChange()) {
+        if (!stateChangeEvent.isInitialStateChange()) {
             return;
         }
         Scheduler.get().scheduleDeferred(new ScheduledCommand() {
 
-            @Override   
+            @Override
             public void execute() {
                 final AbstractLeafletLayerConnector c = (AbstractLeafletLayerConnector) getParent();
                 ef = (EditableFeature) c.getLayer();
 
                 ef.addEditListener(new FeatureEditedListener() {
+
+                    public boolean firstEventSent = false;
 
                     @Override
                     public void onEdit() {
@@ -71,6 +73,12 @@ public class EditableConnector extends AbstractExtensionConnector {
                                 // Polyline/gon
                                 Polyline p = (Polyline) c.getLayer();
                                 rpc.vectorModified(c, p.toGeoJSONString());
+                            }
+                            if (!firstEventSent) {
+                                firstEventSent = true;
+                                // Send first modified even eagerly to let fields
+                                // on the server side know there are pending changes
+                                rpc.ping();
                             }
                         }
                     }

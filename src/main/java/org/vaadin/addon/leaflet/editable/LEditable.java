@@ -43,6 +43,11 @@ public class LEditable extends AbstractExtension {
 
     private void registerRpc() {
         registerRpc(new EditableServerRcp() {
+            
+            @Override
+            public void ping() {
+                // NOP, just used to trunkate the queue
+            }
 
             @Override
             public void circleModified(Connector cc, Point latLng, double radius) {
