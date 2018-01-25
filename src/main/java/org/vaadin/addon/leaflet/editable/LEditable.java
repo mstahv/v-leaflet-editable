@@ -75,6 +75,12 @@ public class LEditable extends AbstractExtension {
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
+                } catch (IllegalArgumentException e) {
+                    if(e.getMessage().startsWith("Invalid number of points in LinearRing")) {
+                        // When cutting a hole, Leaflet might premamturely send a hole which is not a whole
+                    } else {
+                        throw e;
+                    }
                 }
 
                 fireEvent(new FeatureModifiedEvent(LEditable.this, (LeafletLayer) plc));

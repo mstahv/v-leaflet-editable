@@ -56,11 +56,15 @@ public class PolygonField extends AbstractEditableJTSField<Polygon> implements
     }
 
     @Override
-    protected void prepareEditing() {
-        if (lPolyline == null) {
-            lPolyline = new LPolygon();
-            map.addLayer(lPolyline);
+    protected void prepareEditing(boolean userOriginatedValuechangeEvent) {
+        if (userOriginatedValuechangeEvent) {
+            return;
         }
+        if (lPolyline != null) {
+            map.removeComponent(lPolyline);
+        }
+        lPolyline = new LPolygon();
+        map.addLayer(lPolyline);
         final Polygon internalValue = getValue();
         final Polygon toPresentation = getCrsTranslator()
                 .toPresentation(internalValue);
@@ -72,7 +76,7 @@ public class PolygonField extends AbstractEditableJTSField<Polygon> implements
             @Override
             public void featureModified(FeatureModifiedEvent event) {
                 setValue(getCrsTranslator().toModel(
-                        JTSUtil.toPolygon(lPolyline)));
+                        JTSUtil.toPolygon(lPolyline)), true);
             }
         });
         map.zoomToExtent(new Bounds(lPolyline.getPoints()));
@@ -102,5 +106,5 @@ public class PolygonField extends AbstractEditableJTSField<Polygon> implements
         super.prepareViewing();
         getAddHoleButton().setEnabled(false);
     }
-    
+
 }

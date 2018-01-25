@@ -3,6 +3,7 @@ package org.vaadin.addon.leaflet.editable;
 import com.vividsolutions.jts.geom.CoordinateList;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.LineString;
+import org.vaadin.addon.leaflet.AbstractLeafletVector;
 import org.vaadin.addon.leaflet.shared.Bounds;
 import org.vaadin.addon.leaflet.shared.Point;
 import org.vaadin.addon.leaflet.util.JTSUtil;
@@ -24,11 +25,15 @@ public class LinearRingField extends AbstractEditableJTSField<LinearRing> {
     }
 
     @Override
-    protected void prepareEditing() {
-        if (lPolyline == null) {
-            lPolyline = new LPolyline();
-            map.addLayer(lPolyline);
+    protected void prepareEditing(boolean userOriginatedValuechangeEvent) {
+        if (userOriginatedValuechangeEvent) {
+            return;
         }
+        if (lPolyline != null) {
+            map.removeComponent(lPolyline);
+        }
+        lPolyline = new LPolyline();
+        map.addLayer(lPolyline);
         Point[] lPointArray = JTSUtil.toLeafletPointArray(getCrsTranslator()
                 .toPresentation(getValue()));
         lPolyline.setPoints(lPointArray);
@@ -38,7 +43,7 @@ public class LinearRingField extends AbstractEditableJTSField<LinearRing> {
             @Override
             public void featureModified(FeatureModifiedEvent event) {
                 setValue(getCrsTranslator().toModel(
-                        JTSUtil.toLinearRing(lPolyline)));
+                        JTSUtil.toLinearRing(lPolyline)), true);
             }
         });
         map.zoomToExtent(new Bounds(lPolyline.getPoints()));
@@ -67,4 +72,5 @@ public class LinearRingField extends AbstractEditableJTSField<LinearRing> {
         setValue(getCrsTranslator().toModel(ring));
         featureDrawnListenerReg.remove();
     }
+
 }
