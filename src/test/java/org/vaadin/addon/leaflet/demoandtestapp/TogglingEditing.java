@@ -113,8 +113,10 @@ public class TogglingEditing extends AbstractTest implements
                 lEditing = new LEditable(polygon);
                 lEditing.newHole();
                 leafletMap.zoomToContent(polygon);
-                clickListenerReg.remove();
-                clickListenerReg = null;
+                if (clickListenerReg != null) {
+                    clickListenerReg.remove();
+                    clickListenerReg = null;
+                }
                 lEditing.addFeatureModifiedListener(new FeatureModifiedListener() {
 
                     @Override
