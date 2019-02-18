@@ -2,8 +2,8 @@ package org.vaadin.addon.leaflet.editable;
 
 import com.vaadin.server.AbstractExtension;
 import com.vaadin.shared.Registration;
-import com.vividsolutions.jts.geom.LineString;
-import com.vividsolutions.jts.geom.Polygon;
+import org.locationtech.jts.geom.LineString;
+import org.locationtech.jts.geom.Polygon;
 import org.vaadin.addon.leaflet.LeafletLayer;
 
 import java.io.IOException;

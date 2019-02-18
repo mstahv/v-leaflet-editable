@@ -1,9 +1,8 @@
 package org.vaadin.addon.leaflet.editable;
 
 import com.vaadin.shared.Registration;
+import org.locationtech.jts.geom.Geometry;
 import org.vaadin.addon.leaflet.util.AbstractJTSField;
-
-import com.vividsolutions.jts.geom.Geometry;
 
 public abstract class AbstractEditableJTSField<T extends Geometry> extends AbstractJTSField<T> implements FeatureDrawnListener {
 

@@ -2,13 +2,13 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.vaadin.addon</groupId>
     <artifactId>v-leaflet-editable</artifactId>
-    <version>2.0.5-SNAPSHOT</version>
+    <version>3.0.0-SNAPSHOT</version>
     <name>V-Leaflet-Editable</name>
     
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <vaadin.version>8.2.1</vaadin.version>
-        <geotools.version>19.3</geotools.version>
+        <vaadin.version>8.7.0</vaadin.version>
+        <geotools.version>20.2</geotools.version>
     </properties>
 
     <organization>
@@ -268,7 +268,7 @@
         <dependency>
             <groupId>org.vaadin.addon</groupId>
             <artifactId>v-leaflet</artifactId>
-            <version>2.0.10</version>
+            <version>3.0.0</version>
         </dependency>
         <dependency>
             <groupId>org.peimari</groupId>

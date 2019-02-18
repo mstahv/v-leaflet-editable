@@ -1,15 +1,15 @@
 package org.vaadin.addon.leaflet.editable;
 
-import com.vividsolutions.jts.geom.CoordinateList;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.LineString;
+import org.locationtech.jts.geom.CoordinateList;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.LineString;
 import org.vaadin.addon.leaflet.AbstractLeafletVector;
 import org.vaadin.addon.leaflet.shared.Bounds;
 import org.vaadin.addon.leaflet.shared.Point;
 import org.vaadin.addon.leaflet.util.JTSUtil;
 
-import com.vividsolutions.jts.geom.LinearRing;
-import com.vividsolutions.jts.geom.PrecisionModel;
+import org.locationtech.jts.geom.LinearRing;
+import org.locationtech.jts.geom.PrecisionModel;
 import org.vaadin.addon.leaflet.LPolyline;
 
 public class LinearRingField extends AbstractEditableJTSField<LinearRing> {
